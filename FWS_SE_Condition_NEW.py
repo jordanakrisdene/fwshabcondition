@@ -24,29 +24,28 @@ def Model():  # Model
     Ruderal_5cell_scaled_tif = arcpy.Raster(r"S:\Projects\USFWS\SE_FWS_Habitat_2022\SE_FWS_HabitatCondition\Ruderal_5cell_scaled.tif")
     Reclass_LC201 = arcpy.Raster(r"S:\Projects\USFWS\SE_FWS_Habitat_2022\SE_FWS_HabitatCondition\SE_FWS_HabitatCondition.gdb\Reclass_LC201")
     Americas_N_LCM_Cat100_tif = arcpy.Raster(r"C:\Users\Jordana_Anderson\Documents\ArcGIS\Packages\Americas_N_LCM_Cat100_tif_6a30e6\commondata\raster_data\Americas_N_LCM_Cat100.tif")
-    tmp_Extract_Value_tif = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing\tmp_Extract{columnValue}.tif"
-    tmp_Value_raster2pt = fr"S:\Projects\USFWS\SE_FWS_Habitat_2022\SE_FWS_HabitatCondition\SE_FWS_HabitatCondition.gdb\tmp_{columnValue}_raster2pt"
-    tmp_Extract_Value_clip_tif = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing\tmp_Extract{columnValue}_clip.tif"
-    tmp_Value_invasives_tif = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing\tmp_{columnValue}_invasives.tif"
-    tmp_Value_Vdep_tif = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing\tmp_{columnValue}_Vdep.tif"
-    ZonalSt_Value_Vdep = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\ZonalSt_{columnValue}_Vdep"
-    tmp_Value_LCM_tif = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing\tmp_{columnValue}_LCM.tif"
-    ZonalSt_Value_LCM = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\ZonalSt_{columnValue}_LCM"
-
+    #tmp_Extract_Value_tif = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing\tmp_Extract{columnValue}.tif"
+    #tmp_Value_raster2pt = fr"S:\Projects\USFWS\SE_FWS_Habitat_2022\SE_FWS_HabitatCondition\SE_FWS_HabitatCondition.gdb\tmp_{columnValue}_raster2pt"
+    #tmp_Extract_Value_clip_tif = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing\tmp_Extract{columnValue}_clip.tif"
+    #tmp_Value_invasives_tif = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing\tmp_{columnValue}_invasives.tif"
+    #tmp_Value_Vdep_tif = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing\tmp_{columnValue}_Vdep.tif"
+    #ZonalSt_Value_Vdep = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\ZonalSt_{columnValue}_Vdep"
+    #tmp_Value_LCM_tif = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing\tmp_{columnValue}_LCM.tif"
+    #ZonalSt_Value_LCM = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\ZonalSt_{columnValue}_LCM"
     
-    #curObj = arcpy.da.SearchCursor(r"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\combined_EVT_Clip")
-    #row = curObj.next()
-    # row = arcpy.da.SearchCursor(r"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\combined_EVT_Clip", field_names = "Value")
-    
-    table = r"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\combined_EVT_Clip"
-    field = "Value"
-    columnValue = {row[0] for row in arcpy.da.SearchCursor(table, field)}
-    
-    for row in columnValue:
-        global columnValue
-        print(row)
+    path = r"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\combined_EVT_Clip"
+    value_list = []   
+ 
+    with arcpy.da.SearchCursor(path, ["Value"]) as cursor:
+        for row in cursor:
+            value_list.append(row[0])
+            print(value_list)
+    for index in value_list:
+        columnValue = index
+        print("the value is" + str(columnValue))
+        
         # Process: Extract by Attributes (Extract by Attributes) (sa)
-        # tmp_Extract_Value_tif = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing\tmp_Extract{columnValue}.tif"
+        tmp_Extract_Value_tif = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing\tmp_Extract{columnValue}.tif"
         Extract_by_Attributes = tmp_Extract_Value_tif
         tmp_Extract_Value_tif = arcpy.sa.ExtractByAttributes(in_raster=combined_EVT_tif, where_clause=f"VALUE = {columnValue}")
         tmp_Extract_Value_tif.save(Extract_by_Attributes)
@@ -54,7 +53,7 @@ def Model():  # Model
 
 
         # Process: Raster to Point (Raster to Point) (conversion)
-        # tmp_Value_raster2pt = fr"S:\Projects\USFWS\SE_FWS_Habitat_2022\SE_FWS_HabitatCondition\SE_FWS_HabitatCondition.gdb\tmp_{columnValue}_raster2pt"
+        tmp_Value_raster2pt = fr"S:\Projects\USFWS\SE_FWS_Habitat_2022\SE_FWS_HabitatCondition\SE_FWS_HabitatCondition.gdb\tmp_{columnValue}_raster2pt"
         with arcpy.EnvManager(outputMFlag="Disabled", outputZFlag="Disabled"):
             arcpy.conversion.RasterToPoint(in_raster=tmp_Extract_Value_tif, out_point_features=tmp_Value_raster2pt, raster_field="VALUE")
 
@@ -65,36 +64,36 @@ def Model():  # Model
         hex100ac_Value_ = arcpy.conversion.FeatureClassToFeatureClass(in_features=Layer_With_Selection, out_path=SE_FWS_HabitatCondition_gdb, out_name=f"hex100ac_{columnValue}", where_clause="", field_mapping="Shape_Length \"Shape_Length\" false true true 8 Double 0 0,First,#,GenerateTessellation100acres,Shape_Length,-1,-1;Shape_Area \"Shape_Area\" false true true 8 Double 0 0,First,#,GenerateTessellation100acres,Shape_Area,-1,-1;GRID_ID \"GRID_ID\" true true false 12 Text 0 0,First,#,GenerateTessellation100acres,GRID_ID,0,12", config_keyword="")[0]
 
         # Process: Point to Raster (Point to Raster) (conversion)
-        # tmp_Extract_Value_clip_tif = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing\tmp_Extract{columnValue}_clip.tif"
+        tmp_Extract_Value_clip_tif = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing\tmp_Extract{columnValue}_clip.tif"
         with arcpy.EnvManager(cellSize=combined_EVT_tif, snapRaster=combined_EVT_tif):
             arcpy.conversion.PointToRaster(in_features=tmp_Value_raster2pt, value_field="OBJECTID", out_rasterdataset=tmp_Extract_Value_clip_tif, cell_assignment="MOST_FREQUENT", priority_field="NONE", cellsize="30", build_rat="BUILD")
 
         # Process: Extract by Mask (2) (Extract by Mask) (sa)
-        # tmp_Value_invasives_tif = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing\tmp_{columnValue}_invasives.tif"
+        tmp_Value_invasives_tif = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing\tmp_{columnValue}_invasives.tif"
         Extract_by_Mask_2_ = tmp_Value_invasives_tif
         tmp_Value_invasives_tif = arcpy.sa.ExtractByMask(in_raster=Ruderal_5cell_scaled_tif, in_mask_data=tmp_Extract_Value_clip_tif)
         tmp_Value_invasives_tif.save(Extract_by_Mask_2_)
 
 
         # Process: Zonal Statistics as Table (2) (Zonal Statistics as Table) (sa)
-        # ZonalSt_Value_Invasives = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\ZonalSt_{columnValue}_Invasives"
+        ZonalSt_Value_Invasives = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\ZonalSt_{columnValue}_Invasives"
         arcpy.sa.ZonalStatisticsAsTable(in_zone_data=hex100ac_Value_, zone_field="GRID_ID", in_value_raster=tmp_Value_invasives_tif, out_table=ZonalSt_Value_Invasives, ignore_nodata="DATA", statistics_type="MEAN", process_as_multidimensional="CURRENT_SLICE", percentile_values=90, percentile_interpolation_type="AUTO_DETECT").save(Zonal_Statistics_as_Table_2_)
 
 
         # Process: Extract by Mask (Extract by Mask) (sa)
-        # tmp_Value_Vdep_tif = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing\tmp_{columnValue}_Vdep.tif"
+        tmp_Value_Vdep_tif = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing\tmp_{columnValue}_Vdep.tif"
         Extract_by_Mask = tmp_Value_Vdep_tif
         tmp_Value_Vdep_tif = arcpy.sa.ExtractByMask(in_raster=Reclass_LC201, in_mask_data=tmp_Extract_Value_clip_tif)
         tmp_Value_Vdep_tif.save(Extract_by_Mask)
 
 
         # Process: Zonal Statistics as Table (3) (Zonal Statistics as Table) (sa)
-        # ZonalSt_Value_Vdep = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\ZonalSt_{columnValue}_Vdep"
+        ZonalSt_Value_Vdep = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\ZonalSt_{columnValue}_Vdep"
         arcpy.sa.ZonalStatisticsAsTable(in_zone_data=hex100ac_Value_, zone_field="GRID_ID", in_value_raster=tmp_Value_Vdep_tif, out_table=ZonalSt_Value_Vdep, ignore_nodata="DATA", statistics_type="MEAN", process_as_multidimensional="CURRENT_SLICE", percentile_values=90, percentile_interpolation_type="AUTO_DETECT").save(Zonal_Statistics_as_Table_3_)
 
 
         # Process: Extract by Mask (3) (Extract by Mask) (sa)
-        # tmp_Value_LCM_tif = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing\tmp_{columnValue}_LCM.tif"
+        tmp_Value_LCM_tif = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing\tmp_{columnValue}_LCM.tif"
         Extract_by_Mask_3_ = tmp_Value_LCM_tif
         with arcpy.EnvManager(cellSize="MINOF", snapRaster=r"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\combined_EVT_Clip"):
             tmp_Value_LCM_tif = arcpy.sa.ExtractByMask(in_raster=Americas_N_LCM_Cat100_tif, in_mask_data=tmp_Extract_Value_clip_tif)
@@ -102,7 +101,7 @@ def Model():  # Model
 
 
         # Process: Zonal Statistics as Table (Zonal Statistics as Table) (sa)
-        # ZonalSt_Value_LCM = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\ZonalSt_{columnValue}_LCM"
+        ZonalSt_Value_LCM = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\ZonalSt_{columnValue}_LCM"
         arcpy.sa.ZonalStatisticsAsTable(in_zone_data=hex100ac_Value_, zone_field="GRID_ID", in_value_raster=tmp_Value_LCM_tif, out_table=ZonalSt_Value_LCM, ignore_nodata="DATA", statistics_type="MEAN", process_as_multidimensional="CURRENT_SLICE", percentile_values=90, percentile_interpolation_type="AUTO_DETECT").save(Zonal_Statistics_as_Table)
 
 
@@ -169,12 +168,11 @@ def Model():  # Model
 
         # Process: Delete (4) (Delete) (management)
         if tmp_Extract_Value_clip_tif:
-            Delete_Succeeded_4_ = arcpy.management.Delete(in_data=[tmp_Extract_Value_tif], data_type="")[0]
-        
-        loop = row.next()
-        break 
-        
-if __name__ == '__main__':
-    # Global Environment settings
-    with arcpy.EnvManager(scratchWorkspace=r"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb"):
-        Model()
+            Delete_Succeeded_4_ = arcpy.management.Delete(in_data=[tmp_Extract_Value_tif], data_type="")[0]   
+                  
+    if __name__ == '__main__':
+                
+        # Global Environment settings
+        with arcpy.EnvManager(scratchWorkspace=r"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb"):
+            Model()
+           
