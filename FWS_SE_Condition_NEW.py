@@ -78,7 +78,7 @@ for index in value_list:
 
     # calculating the mean condition/quality score
     arcpy.management.CalculateField(in_table=hexgridselection, field="scoreInvR", expression="Abs($feature.scoreInv-100)", expression_type="ARCADE", code_block="", field_type="DOUBLE", enforce_domains="NO_ENFORCE_DOMAINS")
-    arcpy.management.CalculateField(in_table=hexgridselection, field="meanCond", expression="(round((!scoreLCM!+!scoreInvR!)/2), 2)", expression_type="PYTHON3", code_block="", field_type="DOUBLE", enforce_domains="NO_ENFORCE_DOMAINS")
+    arcpy.management.CalculateField(in_table=hexgridselection, field="meanCond", expression="(!scoreLCM!+!scoreInvR!)/2", expression_type="PYTHON3", code_block="", field_type="DOUBLE", enforce_domains="NO_ENFORCE_DOMAINS")
     
     # Work on fire departure score
     print("- calculating the fire departure score")
@@ -92,8 +92,11 @@ for index in value_list:
     arcpy.management.DeleteField(hexgridselection, "MEAN")
     #arcpy.management.AlterField(hexgridselection, "MEAN", "scoreLCM", "LCM Score") 
 
+    # apply a layer file
+    
+
 
     # clean up
     print("- Cleaning up the crumbs")
-    #arcpy.management.Delete(in_data=[tmp_Extract_Value_tif]      
+    arcpy.management.Delete(in_data=[tmp_Value_raster2pt]   )   
 
