@@ -4,11 +4,14 @@ from arcpy.sa import *
 # Check out any necessary licenses.
 arcpy.CheckOutExtension("spatial")
 
+scratchWorkspace = r"FWS_ScratchWorkspace.gdb"
+
 # set up environments
 arcpy.env.extent = "1272796.01889252 837937.189808734 1293290.19762114 851783.705021468" # temporary
 arcpy.env.workspace = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\FWS_HabConScriptTesting"
-arcpy.env.scratchWorkspace =r"S:\Projects\USFWS\SE_FWS_Habitat_2022\FWS_HabConScriptTesting\FWS_HabConScriptTesting.gdb"
-SE_FWS_HabitatCondition_gdb = r"FWS_HabConScriptTesting.gdb"
+scratchWorkspace = arcpy.management.CreateFileGDB(arcpy.env.workspace, scratchWorkspace)
+arcpy.env.scratchWorkspace = scratchWorkspace
+HabitatCondition_gdb = r"FWS_HabConScriptTesting.gdb"
 arcpy.env.overwriteOutput =  True
 
 # Input Variables
@@ -52,7 +55,7 @@ for index in value_list:
     tmp_Value_raster2pt = fr"tmp_{columnValue}_raster2pt"
     arcpy.conversion.RasterToPoint(in_raster=tmp_Extract_Value_tif, out_point_features=tmp_Value_raster2pt, raster_field="VALUE")    
     hexgridselection = arcpy.management.SelectLayerByLocation(in_layer=[hexgrid], overlap_type="INTERSECT", select_features=tmp_Value_raster2pt, search_distance="", selection_type="NEW_SELECTION", invert_spatial_relationship="NOT_INVERT")
-    hexgridselection = arcpy.conversion.FeatureClassToFeatureClass(in_features=hexgridselection, out_path=arcpy.env.workspace, out_name=f"hex100ac_{columnValue}", where_clause="")
+    hexgridselection = arcpy.conversion.FeatureClassToFeatureClass(in_features=hexgridselection, out_path=os.path.join(arcpy.env.workspace,HabitatCondition_gdb), out_name=f"hex100ac_{columnValue}", where_clause="")
 
     # Work on the LCM
     print("- calculating and summarizing the LCM values")
@@ -76,11 +79,12 @@ for index in value_list:
     arcpy.management.JoinField(in_data=hexgridselection, in_field="GRID_ID", join_table=ZonalSt_Value_InvRisk, join_field="GRID_ID", fields=["MEAN"])[0]
     arcpy.management.CalculateField(in_table=hexgridselection, field="scoreInv", expression="round(!MEAN!,1)", field_type="DOUBLE")
     arcpy.management.DeleteField(hexgridselection, "MEAN")
-    #arcpy.management.AlterField(hexgridselection, "MEAN", "scoreLCM", "LCM Score") 
+    arcpy.management.AlterField(hexgridselection, "scoreInv", "scoreInv", "Invasive Score") 
 
     # calculating the mean condition/quality score
     arcpy.management.CalculateField(in_table=hexgridselection, field="scoreInvR", expression="Abs($feature.scoreInv-100)", expression_type="ARCADE", code_block="", field_type="DOUBLE", enforce_domains="NO_ENFORCE_DOMAINS")
     arcpy.management.CalculateField(in_table=hexgridselection, field="meanCond", expression="(!scoreLCM!+!scoreInvR!)/2", expression_type="PYTHON3", code_block="", field_type="DOUBLE", enforce_domains="NO_ENFORCE_DOMAINS")
+    arcpy.management.AlterField(hexgridselection, "meanCond", "meanCond", "Mean Condition")
     
     # Work on fire departure score
     print("- calculating the fire departure score")
@@ -92,7 +96,7 @@ for index in value_list:
     arcpy.management.JoinField(in_data=hexgridselection, in_field="GRID_ID", join_table=ZonalSt_Value_FireDep, join_field="GRID_ID", fields=["MEAN"])[0]
     arcpy.management.CalculateField(in_table=hexgridselection, field="scoreFire", expression="round(!MEAN!,1)", field_type="DOUBLE")
     arcpy.management.DeleteField(hexgridselection, "MEAN")
-    #arcpy.management.AlterField(hexgridselection, "MEAN", "scoreLCM", "LCM Score") 
+    arcpy.management.AlterField(hexgridselection, "scoreFire", "scoreFire", "Fire Departure Score") 
 
     # apply a layer file
 ##    print("- creating the layer files")
@@ -105,3 +109,5 @@ for index in value_list:
     print("- Cleaning up the crumbs")
     arcpy.management.Delete(in_data=[tmp_Value_raster2pt])   
 
+# higher level cleanup
+arcpy.management.Delete(scratchWorkspace)
