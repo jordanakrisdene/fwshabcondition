@@ -9,8 +9,18 @@ scratchWorkspace = r"FWS_ScratchWorkspace.gdb"
 # set up environments
 arcpy.env.extent = "1272796.01889252 837937.189808734 1293290.19762114 851783.705021468" # temporary
 arcpy.env.workspace = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\FWS_HabConScriptTesting"
-arcpy.management.CreateFileGDB(arcpy.env.workspace, scratchWorkspace)
 arcpy.env.scratchWorkspace = os.path.join(arcpy.env.workspace,scratchWorkspace)
+# check if the scratch geodatabase exists
+if arcpy.Exists(arcpy.env.scratchWorkspace):
+    # if it exists, delete it
+    arcpy.Delete_management(arcpy.env.scratchWorkspace)
+    print("Geodatabase deleted.")
+else:
+    # if it doesn't exist, print a message
+    print("Geodatabase does not exist.")
+
+arcpy.management.CreateFileGDB(arcpy.env.workspace, scratchWorkspace)
+
 HabitatCondition_gdb = r"FWS_HabConScriptTesting.gdb"
 arcpy.env.overwriteOutput =  True
 
