@@ -4,16 +4,17 @@ from arcpy.sa import *
 # Check out any necessary licenses.
 arcpy.CheckOutExtension("spatial")
 
+# set up environments
 arcpy.env.extent = "1272796.01889252 837937.189808734 1293290.19762114 851783.705021468" # temporary
 arcpy.env.workspace = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\FWS_HabConScriptTesting"
 arcpy.env.scratchWorkspace =r"S:\Projects\USFWS\SE_FWS_Habitat_2022\FWS_HabConScriptTesting\FWS_HabConScriptTesting.gdb"
+SE_FWS_HabitatCondition_gdb = r"FWS_HabConScriptTesting.gdb"
 arcpy.env.overwriteOutput =  True
 
 # Input Variables
-GenerateTessellation100acres = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\SE_FWS_HabitatCondition\SE_FWS_HabitatCondition.gdb\GenerateTessellation100acres"
+hexgrid = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\SE_FWS_HabitatCondition\SE_FWS_HabitatCondition.gdb\GenerateTessellation100acres"
 combined_EVT_tif = r"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\combined_EVT_Clip"
-SE_FWS_HabitatCondition_gdb = r"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb"
-#Reclass_LC201 = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\SE_FWS_HabitatCondition\SE_FWS_HabitatCondition.gdb\Reclass_LC201"
+
 hexclip = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\FWS_HabConScriptTesting\FWS_HabConScriptTesting.gdb\hexclip"                             
 
 dataLCM = r"S:\Data\NatureServe\Landscape_Condition\Americas_N_LCM_Cat100.tif"
@@ -50,8 +51,8 @@ for index in value_list:
     print("- intersecting the EVT layer with the hex grid")
     tmp_Value_raster2pt = fr"tmp_{columnValue}_raster2pt"
     arcpy.conversion.RasterToPoint(in_raster=tmp_Extract_Value_tif, out_point_features=tmp_Value_raster2pt, raster_field="VALUE")    
-    hexgridselection = arcpy.management.SelectLayerByLocation(in_layer=[GenerateTessellation100acres], overlap_type="INTERSECT", select_features=tmp_Value_raster2pt, search_distance="", selection_type="NEW_SELECTION", invert_spatial_relationship="NOT_INVERT")
-    hexgridselection = arcpy.conversion.FeatureClassToFeatureClass(in_features=hexgridselection, out_path=arcpy.env.workspace, out_name=f"hex100ac_{columnValue}", where_clause="", field_mapping="Shape_Length \"Shape_Length\" false true true 8 Double 0 0,First,#,GenerateTessellation100acres,Shape_Length,-1,-1;Shape_Area \"Shape_Area\" false true true 8 Double 0 0,First,#,GenerateTessellation100acres,Shape_Area,-1,-1;GRID_ID \"GRID_ID\" true true false 12 Text 0 0,First,#,GenerateTessellation100acres,GRID_ID,0,12", config_keyword="")[0]
+    hexgridselection = arcpy.management.SelectLayerByLocation(in_layer=[hexgrid], overlap_type="INTERSECT", select_features=tmp_Value_raster2pt, search_distance="", selection_type="NEW_SELECTION", invert_spatial_relationship="NOT_INVERT")
+    hexgridselection = arcpy.conversion.FeatureClassToFeatureClass(in_features=hexgridselection, out_path=arcpy.env.workspace, out_name=f"hex100ac_{columnValue}", where_clause="")
 
     # Work on the LCM
     print("- calculating and summarizing the LCM values")
@@ -94,11 +95,13 @@ for index in value_list:
     #arcpy.management.AlterField(hexgridselection, "MEAN", "scoreLCM", "LCM Score") 
 
     # apply a layer file
-    dst = hexgridselection + ".lyrx"
-    shutil.copyfile(templateLCM, dst)
-
+    print("- creating the layer files")
+    dst = str(hexgridselection) + ".lyrx"
+    #shutil.copyfile(templateLCM, dst)
+    arcpy.management.ApplySymbologyFromLayer(hexgridselection, templateLCM, "VALUE_FIELD scoreLCM scoreLCM", "DEFAULT")
+    arcpy.management.SaveToLayerFile(hexgridselection, dst, "RELATIVE")
 
     # clean up
     print("- Cleaning up the crumbs")
-    arcpy.management.Delete(in_data=[tmp_Value_raster2pt]   )   
+    arcpy.management.Delete(in_data=[tmp_Value_raster2pt])   
 

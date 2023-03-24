@@ -3,28 +3,27 @@
   "version" : "2.9.0",
   "build" : 32739,
   "layers" : [
-    "CIMPATH=conditionassessment/hex100ac_74523.xml"
+    "CIMPATH=map/hex100ac_7330.xml"
   ],
   "layerDefinitions" : [
     {
       "type" : "CIMFeatureLayer",
-      "name" : "LCM",
-      "uRI" : "CIMPATH=conditionassessment/hex100ac_74523.xml",
+      "name" : "hex100ac_7330",
+      "uRI" : "CIMPATH=map/hex100ac_7330.xml",
       "sourceModifiedTime" : {
         "type" : "TimeInstant"
       },
-      "metadataURI" : "CIMPATH=Metadata/1318259764041843c0844e969653bcad.xml",
       "useSourceMetadata" : true,
-      "description" : "hex100ac_7452",
+      "description" : "hex100ac_7330",
       "layerElevation" : {
         "type" : "CIMLayerElevationSurface",
-        "mapElevationID" : "{8AB51C84-35F0-4132-A129-FC7F8FB64B69}"
+        "mapElevationID" : "{2A37175F-103B-4E47-B142-31B88A83938E}"
       },
       "expanded" : true,
       "layerType" : "Operational",
       "showLegends" : true,
-      "transparency" : 41.763854987951802,
-      "visibility" : false,
+      "transparency" : 28.915663000000002,
+      "visibility" : true,
       "displayCacheType" : "Permanent",
       "maxDisplayCacheAge" : 5,
       "showPopups" : true,
@@ -37,13 +36,13 @@
       "featureElevationExpression" : "0",
       "featureTable" : {
         "type" : "CIMFeatureTable",
-        "displayField" : "GRID_ID",
+        "displayField" : "Shape_Leng",
         "editable" : true,
         "fieldDescriptions" : [
           {
             "type" : "CIMFieldDescription",
-            "alias" : "OBJECTID",
-            "fieldName" : "OBJECTID",
+            "alias" : "FID",
+            "fieldName" : "FID",
             "numberFormat" : {
               "type" : "CIMNumericFormat",
               "alignmentOption" : "esriAlignRight",
@@ -64,15 +63,8 @@
           },
           {
             "type" : "CIMFieldDescription",
-            "alias" : "GRID_ID",
-            "fieldName" : "GRID_ID",
-            "visible" : true,
-            "searchMode" : "Exact"
-          },
-          {
-            "type" : "CIMFieldDescription",
-            "alias" : "Shape_Length",
-            "fieldName" : "Shape_Length",
+            "alias" : "Shape_Leng",
+            "fieldName" : "Shape_Leng",
             "numberFormat" : {
               "type" : "CIMNumericFormat",
               "alignmentOption" : "esriAlignRight",
@@ -80,7 +72,6 @@
               "roundingOption" : "esriRoundNumberOfDecimals",
               "roundingValue" : 6
             },
-            "readOnly" : true,
             "visible" : true,
             "searchMode" : "Exact"
           },
@@ -95,14 +86,20 @@
               "roundingOption" : "esriRoundNumberOfDecimals",
               "roundingValue" : 6
             },
-            "readOnly" : true,
             "visible" : true,
             "searchMode" : "Exact"
           },
           {
             "type" : "CIMFieldDescription",
-            "alias" : "LCM",
-            "fieldName" : "LCM",
+            "alias" : "GRID_ID",
+            "fieldName" : "GRID_ID",
+            "visible" : true,
+            "searchMode" : "Exact"
+          },
+          {
+            "type" : "CIMFieldDescription",
+            "alias" : "scoreLCM",
+            "fieldName" : "scoreLCM",
             "numberFormat" : {
               "type" : "CIMNumericFormat",
               "alignmentOption" : "esriAlignRight",
@@ -115,8 +112,8 @@
           },
           {
             "type" : "CIMFieldDescription",
-            "alias" : "Invasives",
-            "fieldName" : "Invasives",
+            "alias" : "scoreInv",
+            "fieldName" : "scoreInv",
             "numberFormat" : {
               "type" : "CIMNumericFormat",
               "alignmentOption" : "esriAlignRight",
@@ -129,8 +126,8 @@
           },
           {
             "type" : "CIMFieldDescription",
-            "alias" : "Invasives_rev",
-            "fieldName" : "Invasives_rev",
+            "alias" : "scoreInvR",
+            "fieldName" : "scoreInvR",
             "numberFormat" : {
               "type" : "CIMNumericFormat",
               "alignmentOption" : "esriAlignRight",
@@ -143,8 +140,8 @@
           },
           {
             "type" : "CIMFieldDescription",
-            "alias" : "Vdep",
-            "fieldName" : "Vdep",
+            "alias" : "meanCond",
+            "fieldName" : "meanCond",
             "numberFormat" : {
               "type" : "CIMNumericFormat",
               "alignmentOption" : "esriAlignRight",
@@ -157,36 +154,8 @@
           },
           {
             "type" : "CIMFieldDescription",
-            "alias" : "Vdep_rev",
-            "fieldName" : "Vdep_rev",
-            "numberFormat" : {
-              "type" : "CIMNumericFormat",
-              "alignmentOption" : "esriAlignRight",
-              "alignmentWidth" : 0,
-              "roundingOption" : "esriRoundNumberOfDecimals",
-              "roundingValue" : 6
-            },
-            "visible" : true,
-            "searchMode" : "Exact"
-          },
-          {
-            "type" : "CIMFieldDescription",
-            "alias" : "mean3",
-            "fieldName" : "mean3",
-            "numberFormat" : {
-              "type" : "CIMNumericFormat",
-              "alignmentOption" : "esriAlignRight",
-              "alignmentWidth" : 0,
-              "roundingOption" : "esriRoundNumberOfDecimals",
-              "roundingValue" : 6
-            },
-            "visible" : true,
-            "searchMode" : "Exact"
-          },
-          {
-            "type" : "CIMFieldDescription",
-            "alias" : "mean2",
-            "fieldName" : "mean2",
+            "alias" : "scoreFire",
+            "fieldName" : "scoreFire",
             "numberFormat" : {
               "type" : "CIMNumericFormat",
               "alignmentOption" : "esriAlignRight",
@@ -200,9 +169,9 @@
         ],
         "dataConnection" : {
           "type" : "CIMStandardDataConnection",
-          "workspaceConnectionString" : "DATABASE=..\\..\\SE_FWS_HabitatCondition\\SE_FWS_HabitatCondition.gdb",
-          "workspaceFactory" : "FileGDB",
-          "dataset" : "hex100ac_7452",
+          "workspaceConnectionString" : "DATABASE=..\\.",
+          "workspaceFactory" : "Shapefile",
+          "dataset" : "hex100ac_7330.shp",
           "datasetType" : "esriDTFeatureClass"
         },
         "studyAreaSpatialRel" : "esriSpatialRelUndefined",
@@ -222,7 +191,7 @@
           "defaultValues" : {
             "type" : "PropertySet",
             "propertySetItems" : [
-              "lcm",
+              "scorelcm",
               10
             ]
           }
@@ -240,7 +209,7 @@
           "defaultValues" : {
             "type" : "PropertySet",
             "propertySetItems" : [
-              "lcm",
+              "scorelcm",
               30
             ]
           }
@@ -258,7 +227,7 @@
           "defaultValues" : {
             "type" : "PropertySet",
             "propertySetItems" : [
-              "lcm",
+              "scorelcm",
               50
             ]
           }
@@ -276,7 +245,7 @@
           "defaultValues" : {
             "type" : "PropertySet",
             "propertySetItems" : [
-              "lcm",
+              "scorelcm",
               70
             ]
           }
@@ -294,7 +263,7 @@
           "defaultValues" : {
             "type" : "PropertySet",
             "propertySetItems" : [
-              "lcm",
+              "scorelcm",
               90
             ]
           }
@@ -309,7 +278,7 @@
         {
           "type" : "CIMLabelClass",
           "expressionTitle" : "Custom",
-          "expression" : "$feature.GRID_ID",
+          "expression" : "$feature.Shape_Leng",
           "expressionEngine" : "Arcade",
           "featuresToLabel" : "AllVisibleFeatures",
           "maplexLabelPlacementProperties" : {
@@ -749,7 +718,7 @@
           }
         ],
         "classBreakType" : "GraduatedColor",
-        "classificationMethod" : "EqualInterval",
+        "classificationMethod" : "Manual",
         "colorRamp" : {
           "type" : "CIMFixedColorRamp",
           "colorSpace" : {
@@ -825,7 +794,7 @@
           ],
           "arrangement" : "Default"
         },
-        "field" : "LCM",
+        "field" : "scoreLCM",
         "numberFormat" : {
           "type" : "CIMNumericFormat",
           "alignmentOption" : "esriAlignLeft",
@@ -835,7 +804,7 @@
           "zeroPad" : true
         },
         "showInAscendingOrder" : true,
-        "heading" : "LCM",
+        "heading" : "scoreLCM",
         "sampleSize" : 10000,
         "defaultSymbolPatch" : "Default",
         "defaultSymbol" : {
@@ -927,20 +896,13 @@
       "snappable" : true
     }
   ],
-  "binaryReferences" : [
-    {
-      "type" : "CIMBinaryReference",
-      "uRI" : "CIMPATH=Metadata/1318259764041843c0844e969653bcad.xml",
-      "data" : "<?xml version=\"1.0\"?>\r\n<metadata xml:lang=\"en\"><Esri><CreaDate>20230105</CreaDate><CreaTime>03250100</CreaTime><ArcGISFormat>1.0</ArcGISFormat><SyncOnce>TRUE</SyncOnce></Esri><dataIdInfo><idCitation><resTitle>hex100ac_7452</resTitle></idCitation><idAbs>hex100ac_7452</idAbs><idCredit></idCredit><idPurp></idPurp><resConst><Consts><useLimit></useLimit></Consts></resConst></dataIdInfo></metadata>\r\n"
-    }
-  ],
   "elevationSurfaces" : [
     {
       "type" : "CIMMapElevationSurface",
       "elevationMode" : "BaseGlobeSurface",
       "name" : "Ground",
       "verticalExaggeration" : 1,
-      "mapElevationID" : "{8AB51C84-35F0-4132-A129-FC7F8FB64B69}",
+      "mapElevationID" : "{2A37175F-103B-4E47-B142-31B88A83938E}",
       "color" : {
         "type" : "CIMRGBColor",
         "values" : [
