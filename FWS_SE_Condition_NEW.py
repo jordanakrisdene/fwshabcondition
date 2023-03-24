@@ -95,11 +95,11 @@ for index in value_list:
     #arcpy.management.AlterField(hexgridselection, "MEAN", "scoreLCM", "LCM Score") 
 
     # apply a layer file
-    print("- creating the layer files")
-    dst = str(hexgridselection) + ".lyrx"
-    #shutil.copyfile(templateLCM, dst)
-    arcpy.management.ApplySymbologyFromLayer(hexgridselection, templateLCM, "VALUE_FIELD scoreLCM scoreLCM", "DEFAULT")
-    arcpy.management.SaveToLayerFile(hexgridselection, dst, "RELATIVE")
+##    print("- creating the layer files")
+##    dst = str(hexgridselection) + ".lyrx"
+##    #shutil.copyfile(templateLCM, dst)
+##    arcpy.management.ApplySymbologyFromLayer(hexgridselection, templateLCM, "VALUE_FIELD scoreLCM scoreLCM", "DEFAULT")
+##    arcpy.management.SaveToLayerFile(hexgridselection, dst, "RELATIVE")
 
     # clean up
     print("- Cleaning up the crumbs")
