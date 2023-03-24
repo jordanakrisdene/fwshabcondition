@@ -15,12 +15,12 @@ arcpy.CheckOutExtension("spatial")
 GenerateTessellation100acres = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\SE_FWS_HabitatCondition\SE_FWS_HabitatCondition.gdb\GenerateTessellation100acres"
 combined_EVT_tif = r"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\combined_EVT_Clip"
 SE_FWS_HabitatCondition_gdb = r"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb"
-
-Reclass_LC201 = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\SE_FWS_HabitatCondition\SE_FWS_HabitatCondition.gdb\Reclass_LC201"
+#Reclass_LC201 = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\SE_FWS_HabitatCondition\SE_FWS_HabitatCondition.gdb\Reclass_LC201"
 hexclip = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\FWS_HabConScriptTesting\FWS_HabConScriptTesting.gdb\hexclip"                             
 
 dataLCM = r"S:\Data\NatureServe\Landscape_Condition\Americas_N_LCM_Cat100.tif"
 dataRuderal = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\SE_FWS_HabitatCondition\Ruderal_5cell_scaled.tif"
+dataFireDep = r"S:\Data\External\LANDFIRE_Fire_Departure\LF2020_VDep_220_CONUS\LF2020_VDep_220_CONUS\Tif\LC20_VDep_220.tif"
 
 #path = r"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\combined_EVT_Clip"
 value_list = []   
@@ -64,7 +64,7 @@ for index in value_list:
     arcpy.management.DeleteField(hexgridselection, "MEAN")
     #arcpy.management.AlterField(hexgridselection, "MEAN", "scoreLCM", "LCM Score") 
 
-    # Work on Invasive Risk
+    # Work on Invasive Risk score
     print("- calculating the invasive risk score")
     tmp_InvRisk_tif = fr"tmp_{columnValue}_Inv.tif"
     tmp_InvRisk_tif = arcpy.sa.ExtractByMask(in_raster=dataRuderal, in_mask_data=nameEVT)
@@ -75,39 +75,28 @@ for index in value_list:
     arcpy.management.CalculateField(in_table=hexgridselection, field="scoreInv", expression="round(!MEAN!,1)")
     arcpy.management.DeleteField(hexgridselection, "MEAN")
     #arcpy.management.AlterField(hexgridselection, "MEAN", "scoreLCM", "LCM Score") 
-    
-    #ZonalSt_Value_Invasives = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\ZonalSt_{columnValue}_Invasives"
-##
-##
 
-##
-##    # Process: Select Layer By Location (Select Layer By Location) (management)
-##    
-##
-##    # Process: Extract by Mask (2) (Extract by Mask) (sa)
-##    tmp_Value_invasives_tif = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing\tmp_{columnValue}_invasives.tif"
-##    Extract_by_Mask_2_ = tmp_Value_invasives_tif
-##    tmp_Value_invasives_tif = arcpy.sa.ExtractByMask(in_raster=Ruderal_5cell_scaled_tif, in_mask_data=tmp_Extract_Value_clip_tif)
-##    tmp_Value_invasives_tif.save(Extract_by_Mask_2_)
-##
-##
-##    # Process: Zonal Statistics as Table (2) (Zonal Statistics as Table) (sa)
-##    ZonalSt_Value_Invasives = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\ZonalSt_{columnValue}_Invasives"
-##    arcpy.sa.ZonalStatisticsAsTable(in_zone_data=hex100ac_Value_, zone_field="GRID_ID", in_value_raster=tmp_Value_invasives_tif, out_table=ZonalSt_Value_Invasives, ignore_nodata="DATA", statistics_type="MEAN", process_as_multidimensional="CURRENT_SLICE", percentile_values=90, percentile_interpolation_type="AUTO_DETECT").save(Zonal_Statistics_as_Table_2_)
-##
-##
-##    # Process: Extract by Mask (Extract by Mask) (sa)
-##    tmp_Value_Vdep_tif = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing\tmp_{columnValue}_Vdep.tif"
-##    Extract_by_Mask = tmp_Value_Vdep_tif
-##    tmp_Value_Vdep_tif = arcpy.sa.ExtractByMask(in_raster=Reclass_LC201, in_mask_data=tmp_Extract_Value_clip_tif)
-##    tmp_Value_Vdep_tif.save(Extract_by_Mask)
-##
-##
-##    # Process: Zonal Statistics as Table (3) (Zonal Statistics as Table) (sa)
-##    ZonalSt_Value_Vdep = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\ZonalSt_{columnValue}_Vdep"
-##    arcpy.sa.ZonalStatisticsAsTable(in_zone_data=hex100ac_Value_, zone_field="GRID_ID", in_value_raster=tmp_Value_Vdep_tif, out_table=ZonalSt_Value_Vdep, ignore_nodata="DATA", statistics_type="MEAN", process_as_multidimensional="CURRENT_SLICE", percentile_values=90, percentile_interpolation_type="AUTO_DETECT").save(Zonal_Statistics_as_Table_3_)
-##
-##
+    # calculating the mean condition/quality score
+    arcpy.management.CalculateField(in_table=hexgridselection, field="scoreInvR", expression="Abs($feature.scoreInv-100)", expression_type="ARCADE", code_block="", field_type="DOUBLE", enforce_domains="NO_ENFORCE_DOMAINS")
+    rcpy.management.CalculateField(in_table=hexgridselection, field="meanCond", expression="(!scoreLCM!+!scoreInvR!)/2", expression_type="PYTHON3", code_block="", field_type="DOUBLE", enforce_domains="NO_ENFORCE_DOMAINS")
+    
+    # Work on fire departure score
+    print("- calculating the fire departure score")
+    tmp_FireDep_tif = fr"tmp_{columnValue}_Inv.tif"
+    tmp_FireDep_tif = arcpy.sa.ExtractByMask(in_raster=dataFireDep, in_mask_data=nameEVT)
+    ZonalSt_Value_FireDep = fr"ZonalSt_{columnValue}_InvRisk"
+    arcpy.sa.ZonalStatisticsAsTable(in_zone_data=hexgridselection, zone_field="GRID_ID", in_value_raster=tmp_FireDep_tif,
+                                    out_table=ZonalSt_Value_FireDep, ignore_nodata="DATA", statistics_type="MEAN")
+    arcpy.management.JoinField(in_data=hexgridselection, in_field="GRID_ID", join_table=ZonalSt_Value_FireDep, join_field="GRID_ID", fields=["MEAN"])[0]
+    arcpy.management.CalculateField(in_table=hexgridselection, field="scoreFire", expression="round(!MEAN!,1)")
+    arcpy.management.DeleteField(hexgridselection, "MEAN")
+    #arcpy.management.AlterField(hexgridselection, "MEAN", "scoreLCM", "LCM Score") 
+
+
+    # clean up
+    print("- Cleaning up the crumbs")
+    #arcpy.management.Delete(in_data=[tmp_Extract_Value_tif]      
+
 
 ##    # Process: Delete Field (Delete Field) (management)
 ##    hex100ac_Value_4_ = arcpy.management.DeleteField(in_table=hex100ac_Value_2_, drop_field=["MEAN"], method="DELETE_FIELDS")[0]
@@ -151,19 +140,3 @@ for index in value_list:
 ##    # Process: Calculate Field (7) (Calculate Field) (management)
 ##    if hex100ac_Value_4_ and hex100ac_Value_8_:
 ##        hex100ac_Value_14_ = arcpy.management.CalculateField(in_table=hex100ac_Value_13_, field="mean2", expression="(!LCM!+!Vdep_rev!)/2", expression_type="PYTHON3", code_block="", field_type="DOUBLE", enforce_domains="NO_ENFORCE_DOMAINS")[0]
-##
-##    # Process: Delete (Delete) (management)
-##    if hex100ac_Value_14_ and hex100ac_Value_4_ and hex100ac_Value_8_:
-##        Delete_Succeeded = arcpy.management.Delete(in_data=[ZonalSt_Value_Invasives], data_type="")[0]
-##
-##    # Process: Delete (2) (Delete) (management)
-##    if hex100ac_Value_14_ and hex100ac_Value_4_ and hex100ac_Value_8_:
-##        Delete_Succeeded_2_ = arcpy.management.Delete(in_data=[ZonalSt_Value_Vdep], data_type="")[0]
-##
-##    # Process: Delete (3) (Delete) (management)
-##    if hex100ac_Value_14_ and hex100ac_Value_4_ and hex100ac_Value_8_:
-##        Delete_Succeeded_3_ = arcpy.management.Delete(in_data=[ZonalSt_Value_LCM], data_type="")[0]
-##
-##    # Process: Delete (4) (Delete) (management)
-##    if tmp_Extract_Value_clip_tif:
-##        Delete_Succeeded_4_ = arcpy.management.Delete(in_data=[tmp_Extract_Value_tif], data_type="")[0]
