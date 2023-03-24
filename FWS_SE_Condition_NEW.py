@@ -60,7 +60,7 @@ for index in value_list:
     arcpy.sa.ZonalStatisticsAsTable(in_zone_data=hexgridselection, zone_field="GRID_ID", in_value_raster=tmp_Value_LCM_tif,
                                     out_table=ZonalSt_Value_LCM, ignore_nodata="DATA", statistics_type="MEAN")
     arcpy.management.JoinField(in_data=hexgridselection, in_field="GRID_ID", join_table=ZonalSt_Value_LCM, join_field="GRID_ID", fields=["MEAN"])[0]
-    arcpy.management.CalculateField(in_table=hexgridselection, field="scoreLCM", expression="round(!MEAN!,1)")
+    arcpy.management.CalculateField(in_table=hexgridselection, field="scoreLCM", expression="round(!MEAN!,1)", field_type="DOUBLE")
     arcpy.management.DeleteField(hexgridselection, "MEAN")
     #arcpy.management.AlterField(hexgridselection, "MEAN", "scoreLCM", "LCM Score") 
 
@@ -72,13 +72,13 @@ for index in value_list:
     arcpy.sa.ZonalStatisticsAsTable(in_zone_data=hexgridselection, zone_field="GRID_ID", in_value_raster=tmp_InvRisk_tif,
                                     out_table=ZonalSt_Value_InvRisk, ignore_nodata="DATA", statistics_type="MEAN")
     arcpy.management.JoinField(in_data=hexgridselection, in_field="GRID_ID", join_table=ZonalSt_Value_InvRisk, join_field="GRID_ID", fields=["MEAN"])[0]
-    arcpy.management.CalculateField(in_table=hexgridselection, field="scoreInv", expression="round(!MEAN!,1)")
+    arcpy.management.CalculateField(in_table=hexgridselection, field="scoreInv", expression="round(!MEAN!,1)", field_type="DOUBLE")
     arcpy.management.DeleteField(hexgridselection, "MEAN")
     #arcpy.management.AlterField(hexgridselection, "MEAN", "scoreLCM", "LCM Score") 
 
     # calculating the mean condition/quality score
     arcpy.management.CalculateField(in_table=hexgridselection, field="scoreInvR", expression="Abs($feature.scoreInv-100)", expression_type="ARCADE", code_block="", field_type="DOUBLE", enforce_domains="NO_ENFORCE_DOMAINS")
-    rcpy.management.CalculateField(in_table=hexgridselection, field="meanCond", expression="(!scoreLCM!+!scoreInvR!)/2", expression_type="PYTHON3", code_block="", field_type="DOUBLE", enforce_domains="NO_ENFORCE_DOMAINS")
+    arcpy.management.CalculateField(in_table=hexgridselection, field="meanCond", expression="(round((!scoreLCM!+!scoreInvR!)/2), 2)", expression_type="PYTHON3", code_block="", field_type="DOUBLE", enforce_domains="NO_ENFORCE_DOMAINS")
     
     # Work on fire departure score
     print("- calculating the fire departure score")
@@ -88,7 +88,7 @@ for index in value_list:
     arcpy.sa.ZonalStatisticsAsTable(in_zone_data=hexgridselection, zone_field="GRID_ID", in_value_raster=tmp_FireDep_tif,
                                     out_table=ZonalSt_Value_FireDep, ignore_nodata="DATA", statistics_type="MEAN")
     arcpy.management.JoinField(in_data=hexgridselection, in_field="GRID_ID", join_table=ZonalSt_Value_FireDep, join_field="GRID_ID", fields=["MEAN"])[0]
-    arcpy.management.CalculateField(in_table=hexgridselection, field="scoreFire", expression="round(!MEAN!,1)")
+    arcpy.management.CalculateField(in_table=hexgridselection, field="scoreFire", expression="round(!MEAN!,1)", field_type="DOUBLE")
     arcpy.management.DeleteField(hexgridselection, "MEAN")
     #arcpy.management.AlterField(hexgridselection, "MEAN", "scoreLCM", "LCM Score") 
 
@@ -97,46 +97,3 @@ for index in value_list:
     print("- Cleaning up the crumbs")
     #arcpy.management.Delete(in_data=[tmp_Extract_Value_tif]      
 
-
-##    # Process: Delete Field (Delete Field) (management)
-##    hex100ac_Value_4_ = arcpy.management.DeleteField(in_table=hex100ac_Value_2_, drop_field=["MEAN"], method="DELETE_FIELDS")[0]
-##
-##    # Process: Join Field (2) (Join Field) (management)
-##    if hex100ac_Value_4_:
-##        hex100ac_Value_5_ = arcpy.management.JoinField(in_data=hex100ac_Value_, in_field="GRID_ID", join_table=ZonalSt_Value_Invasives, join_field="GRID_ID", fields=["MEAN"])[0]
-##
-##    # Process: Calculate Field (2) (Calculate Field) (management)
-##    if hex100ac_Value_4_:
-##        hex100ac_Value_6_ = arcpy.management.CalculateField(in_table=hex100ac_Value_5_, field="Invasives", expression="!Mean!", expression_type="PYTHON3", code_block="", field_type="DOUBLE", enforce_domains="NO_ENFORCE_DOMAINS")[0]
-##
-##    # Process: Calculate Field (4) (Calculate Field) (management)
-##    if hex100ac_Value_4_:
-##        hex100ac_Value_7_ = arcpy.management.CalculateField(in_table=hex100ac_Value_6_, field="Invasives_rev", expression="Abs($feature.Invasives-100)", expression_type="ARCADE", code_block="", field_type="DOUBLE", enforce_domains="NO_ENFORCE_DOMAINS")[0]
-##
-##    # Process: Delete Field (2) (Delete Field) (management)
-##    if hex100ac_Value_4_:
-##        hex100ac_Value_8_ = arcpy.management.DeleteField(in_table=hex100ac_Value_7_, drop_field=["MEAN"], method="DELETE_FIELDS")[0]
-##
-##    # Process: Join Field (3) (Join Field) (management)
-##    if hex100ac_Value_4_ and hex100ac_Value_8_:
-##        hex100ac_Value_9_ = arcpy.management.JoinField(in_data=hex100ac_Value_, in_field="GRID_ID", join_table=ZonalSt_Value_Vdep, join_field="GRID_ID", fields=["MEAN"])[0]
-##
-##    # Process: Calculate Field (3) (Calculate Field) (management)
-##    if hex100ac_Value_4_ and hex100ac_Value_8_:
-##        hex100ac_Value_15_ = arcpy.management.CalculateField(in_table=hex100ac_Value_9_, field="Vdep", expression="!MEAN!", expression_type="PYTHON3", code_block="", field_type="DOUBLE", enforce_domains="NO_ENFORCE_DOMAINS")[0]
-##
-##    # Process: Calculate Field (5) (Calculate Field) (management)
-##    if hex100ac_Value_4_ and hex100ac_Value_8_:
-##        hex100ac_Value_11_ = arcpy.management.CalculateField(in_table=hex100ac_Value_15_, field="Vdep_rev", expression="Abs($feature.Vdep-100)", expression_type="ARCADE", code_block="", field_type="DOUBLE", enforce_domains="NO_ENFORCE_DOMAINS")[0]
-##
-##    # Process: Delete Field (3) (Delete Field) (management)
-##    if hex100ac_Value_4_ and hex100ac_Value_8_:
-##        hex100ac_Value_12_ = arcpy.management.DeleteField(in_table=hex100ac_Value_11_, drop_field=["MEAN"], method="DELETE_FIELDS")[0]
-##
-##    # Process: Calculate Field (6) (Calculate Field) (management)
-##    if hex100ac_Value_4_ and hex100ac_Value_8_:
-##        hex100ac_Value_13_ = arcpy.management.CalculateField(in_table=hex100ac_Value_12_, field="mean3", expression="(!LCM!+ !Vdep_rev! + !Invasives_rev!)/3 ", expression_type="PYTHON3", code_block="", field_type="DOUBLE", enforce_domains="NO_ENFORCE_DOMAINS")[0]
-##
-##    # Process: Calculate Field (7) (Calculate Field) (management)
-##    if hex100ac_Value_4_ and hex100ac_Value_8_:
-##        hex100ac_Value_14_ = arcpy.management.CalculateField(in_table=hex100ac_Value_13_, field="mean2", expression="(!LCM!+!Vdep_rev!)/2", expression_type="PYTHON3", code_block="", field_type="DOUBLE", enforce_domains="NO_ENFORCE_DOMAINS")[0]
