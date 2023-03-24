@@ -9,17 +9,15 @@ scratchWorkspace = r"FWS_ScratchWorkspace.gdb"
 # set up environments
 arcpy.env.extent = "1272796.01889252 837937.189808734 1293290.19762114 851783.705021468" # temporary
 arcpy.env.workspace = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\FWS_HabConScriptTesting"
-scratchWorkspace = arcpy.management.CreateFileGDB(arcpy.env.workspace, scratchWorkspace)
-arcpy.env.scratchWorkspace = scratchWorkspace
+arcpy.management.CreateFileGDB(arcpy.env.workspace, scratchWorkspace)
+arcpy.env.scratchWorkspace = os.path.join(arcpy.env.workspace,scratchWorkspace)
 HabitatCondition_gdb = r"FWS_HabConScriptTesting.gdb"
 arcpy.env.overwriteOutput =  True
 
 # Input Variables
 hexgrid = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\SE_FWS_HabitatCondition\SE_FWS_HabitatCondition.gdb\GenerateTessellation100acres"
 combined_EVT_tif = r"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\combined_EVT_Clip"
-
 hexclip = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\FWS_HabConScriptTesting\FWS_HabConScriptTesting.gdb\hexclip"                             
-
 dataLCM = r"S:\Data\NatureServe\Landscape_Condition\Americas_N_LCM_Cat100.tif"
 dataRuderal = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\SE_FWS_HabitatCondition\Ruderal_5cell_scaled.tif"
 dataFireDep = r"S:\Data\External\LANDFIRE_Fire_Departure\LF2020_VDep_220_CONUS\LF2020_VDep_220_CONUS\Tif\LC20_VDep_220.tif"
