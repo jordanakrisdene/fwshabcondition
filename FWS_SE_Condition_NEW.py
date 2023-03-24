@@ -47,8 +47,8 @@ with arcpy.da.SearchCursor("EVTclip.tif", ["Value","NatureServ"]) as cursor:
 col_idx = 1
 
 # for altering a text column later
-column = [row[1] for row in value_list] # use a list comprehension to extract the column of interest
-max_length = max(len(element) for element in column) + 10 # find the maximum length of the elements in the column
+#column = [row[1] for row in value_list] # use a list comprehension to extract the column of interest
+#max_length = max(len(element) for element in column) + 10 # find the maximum length of the elements in the column
         
 print("Creating condition datasets for " + str(len(value_list)) + " ecological systems.")
 print("===============================================================================")
@@ -80,6 +80,7 @@ for index in value_list:
 
     arcpy.management.CalculateField(in_table=hexgridselection, field="EVTcode", expression=EVTvalue, field_type="LONG")
     arcpy.management.CalculateField(in_table=hexgridselection, field="EVTname", expression="'" + EVTname + "'", field_type="TEXT")
+    #arcpy.management.AlterField(in_table=hexgridselection, field="EVTname", new_field_alias="EVT name", field_type="TEXT", field_length=max_length)
 
     # Work on the LCM
     print("- calculating and summarizing the LCM values")
@@ -134,6 +135,6 @@ for index in value_list:
     arcpy.management.Delete(in_data=[tmp_Value_raster2pt])   
 
 # higher level cleanup
-arcpy.management.AlterField(in_table=hexgridselection, field="EVTname", new_field_alias="EVT name", field_type="TEXT", field_length=max_length)
+
 
 #arcpy.management.Delete(scratchWorkspace)
