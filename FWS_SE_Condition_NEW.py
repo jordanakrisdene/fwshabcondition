@@ -17,16 +17,20 @@ combined_EVT_tif = r"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Co
 SE_FWS_HabitatCondition_gdb = r"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb"
 Ruderal_5cell_scaled_tif = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\SE_FWS_HabitatCondition\Ruderal_5cell_scaled.tif"
 Reclass_LC201 = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\SE_FWS_HabitatCondition\SE_FWS_HabitatCondition.gdb\Reclass_LC201"
-                             
+hexclip = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\FWS_HabConScriptTesting\FWS_HabConScriptTesting.gdb\hexclip"                             
 #Americas_N_LCM_Cat100_tif = arcpy.Raster(r"C:\Users\Jordana_Anderson\Documents\ArcGIS\Packages\Americas_N_LCM_Cat100_tif_6a30e6\commondata\raster_data\Americas_N_LCM_Cat100.tif")
 
 #path = r"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\combined_EVT_Clip"
 value_list = []   
 
-with arcpy.da.SearchCursor(combined_EVT_tif, ["Value"]) as cursor:
+outExtractByMask = ExtractByMask(combined_EVT_tif, hexclip)
+outExtractByMask1 = ExtractByAttributes(outExtractByMask, '"Value_1" <> 0') 
+outExtractByMask1.save("EVTclip.tif")
+
+with arcpy.da.SearchCursor("EVTclip.tif", ["Value"]) as cursor:
     for row in cursor:
         value_list.append(row[0])
-        print(value_list)
+print(value_list)
 
 for index in value_list:
     columnValue = index
@@ -37,7 +41,7 @@ for index in value_list:
     nameEVT = "tmp_Extract_" + str(columnValue) + ".tif"
     w_clause = '"VALUE" = ' + "%s" %columnValue
     #tmp_Extract_Value_tif = ExtractByAttributes(in_raster=combined_EVT_tif, where_clause='"VALUE" = 7330') 
-    tmp_Extract_Value_tif = ExtractByAttributes(in_raster=combined_EVT_tif, where_clause=w_clause)
+    tmp_Extract_Value_tif = ExtractByAttributes(in_raster="EVTclip.tif", where_clause=w_clause)
     tmp_Extract_Value_tif.save(os.path.join(arcpy.env.workspace, nameEVT))
 
     #ZonalSt_Value_Invasives = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\ZonalSt_{columnValue}_Invasives"
