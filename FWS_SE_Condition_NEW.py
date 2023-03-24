@@ -15,10 +15,12 @@ arcpy.CheckOutExtension("spatial")
 GenerateTessellation100acres = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\SE_FWS_HabitatCondition\SE_FWS_HabitatCondition.gdb\GenerateTessellation100acres"
 combined_EVT_tif = r"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\combined_EVT_Clip"
 SE_FWS_HabitatCondition_gdb = r"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb"
-Ruderal_5cell_scaled_tif = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\SE_FWS_HabitatCondition\Ruderal_5cell_scaled.tif"
+
 Reclass_LC201 = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\SE_FWS_HabitatCondition\SE_FWS_HabitatCondition.gdb\Reclass_LC201"
 hexclip = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\FWS_HabConScriptTesting\FWS_HabConScriptTesting.gdb\hexclip"                             
+
 dataLCM = r"S:\Data\NatureServe\Landscape_Condition\Americas_N_LCM_Cat100.tif"
+dataRuderal = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\SE_FWS_HabitatCondition\Ruderal_5cell_scaled.tif"
 
 #path = r"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\combined_EVT_Clip"
 value_list = []   
@@ -54,7 +56,6 @@ for index in value_list:
     print("- calculating and summarizing the LCM values")
     tmp_Value_LCM_tif = fr"tmp_{columnValue}_LCM.tif"
     tmp_Value_LCM_tif = arcpy.sa.ExtractByMask(in_raster=dataLCM, in_mask_data=nameEVT)
- #        tmp_Value_LCM_tif.save(Extract_by_Mask_3_)
     ZonalSt_Value_LCM = fr"ZonalSt_{columnValue}_LCM"
     arcpy.sa.ZonalStatisticsAsTable(in_zone_data=hexgridselection, zone_field="GRID_ID", in_value_raster=tmp_Value_LCM_tif,
                                     out_table=ZonalSt_Value_LCM, ignore_nodata="DATA", statistics_type="MEAN")
@@ -65,7 +66,15 @@ for index in value_list:
 
     # Work on Invasive Risk
     print("- calculating the invasive risk score")
-
+    tmp_InvRisk_tif = fr"tmp_{columnValue}_Inv.tif"
+    tmp_InvRisk_tif = arcpy.sa.ExtractByMask(in_raster=dataRuderal, in_mask_data=nameEVT)
+    ZonalSt_Value_InvRisk = fr"ZonalSt_{columnValue}_InvRisk"
+    arcpy.sa.ZonalStatisticsAsTable(in_zone_data=hexgridselection, zone_field="GRID_ID", in_value_raster=tmp_InvRisk_tif,
+                                    out_table=ZonalSt_Value_InvRisk, ignore_nodata="DATA", statistics_type="MEAN")
+    arcpy.management.JoinField(in_data=hexgridselection, in_field="GRID_ID", join_table=ZonalSt_Value_InvRisk, join_field="GRID_ID", fields=["MEAN"])[0]
+    arcpy.management.CalculateField(in_table=hexgridselection, field="scoreInv", expression="round(!MEAN!,1)")
+    arcpy.management.DeleteField(hexgridselection, "MEAN")
+    #arcpy.management.AlterField(hexgridselection, "MEAN", "scoreLCM", "LCM Score") 
     
     #ZonalSt_Value_Invasives = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\ZonalSt_{columnValue}_Invasives"
 ##
