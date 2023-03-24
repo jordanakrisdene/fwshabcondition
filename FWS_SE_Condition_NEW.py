@@ -1,9 +1,10 @@
-import arcpy
+import arcpy, os
+from arcpy.sa import *
 
-arcpy.env.extent = "1358655.61902566 1157007.20510581 1369533.21673888 1165458.49704982"
-
-arcpy.env.scratchWorkspace=r"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb"
-arcpy.env.overwriteOutput = False
+arcpy.env.extent = "1272796.01889252 837937.189808734 1293290.19762114 851783.705021468" # temporary
+arcpy.env.workspace = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\FWS_HabConScriptTesting"
+arcpy.env.scratchWorkspace =r"S:\Projects\USFWS\SE_FWS_Habitat_2022\FWS_HabConScriptTesting\FWS_HabConScriptTesting.gdb"
+arcpy.env.overwriteOutput =  True
 
 # Check out any necessary licenses.
 arcpy.CheckOutExtension("spatial")
@@ -31,12 +32,15 @@ for index in value_list:
     columnValue = index
     print("the value is " + str(columnValue))
     
-##    # Process: Extract by Attributes (Extract by Attributes) (sa)
-##    tmp_Extract_Value_tif = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing\tmp_Extract{columnValue}.tif"
-##    Extract_by_Attributes = tmp_Extract_Value_tif
-##    tmp_Extract_Value_tif = arcpy.sa.ExtractByAttributes(in_raster=combined_EVT_tif, where_clause=f"VALUE = {columnValue}")
-##    tmp_Extract_Value_tif.save(Extract_by_Attributes)
-##    ZonalSt_Value_Invasives = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\ZonalSt_{columnValue}_Invasives"
+    # Process: Extract by Attributes (Extract by Attributes) (sa)
+    print("- working on extracting the EVT data")
+    nameEVT = "tmp_Extract_" + str(columnValue) + ".tif"
+    w_clause = '"VALUE" = ' + "%s" %columnValue
+    #tmp_Extract_Value_tif = ExtractByAttributes(in_raster=combined_EVT_tif, where_clause='"VALUE" = 7330') 
+    tmp_Extract_Value_tif = ExtractByAttributes(in_raster=combined_EVT_tif, where_clause=w_clause)
+    tmp_Extract_Value_tif.save(os.path.join(arcpy.env.workspace, nameEVT))
+
+    #ZonalSt_Value_Invasives = fr"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\ZonalSt_{columnValue}_Invasives"
 ##
 ##
 ##    # Process: Raster to Point (Raster to Point) (conversion)
