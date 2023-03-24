@@ -1,15 +1,13 @@
-import arcpy, os
+import arcpy, os, shutil
 from arcpy.sa import *
+
+# Check out any necessary licenses.
+arcpy.CheckOutExtension("spatial")
 
 arcpy.env.extent = "1272796.01889252 837937.189808734 1293290.19762114 851783.705021468" # temporary
 arcpy.env.workspace = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\FWS_HabConScriptTesting"
 arcpy.env.scratchWorkspace =r"S:\Projects\USFWS\SE_FWS_Habitat_2022\FWS_HabConScriptTesting\FWS_HabConScriptTesting.gdb"
 arcpy.env.overwriteOutput =  True
-
-# Check out any necessary licenses.
-arcpy.CheckOutExtension("spatial")
-#arcpy.CheckOutExtension("ImageExt")
-#arcpy.CheckOutExtension("ImageAnalyst")
 
 # Input Variables
 GenerateTessellation100acres = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\SE_FWS_HabitatCondition\SE_FWS_HabitatCondition.gdb\GenerateTessellation100acres"
@@ -21,6 +19,9 @@ hexclip = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\FWS_HabConScriptTesting\FWS_Ha
 dataLCM = r"S:\Data\NatureServe\Landscape_Condition\Americas_N_LCM_Cat100.tif"
 dataRuderal = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\SE_FWS_HabitatCondition\Ruderal_5cell_scaled.tif"
 dataFireDep = r"S:\Data\External\LANDFIRE_Fire_Departure\LF2020_VDep_220_CONUS\LF2020_VDep_220_CONUS\Tif\LC20_VDep_220.tif"
+
+templateInvasiveSource = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\FWS_HabConScriptTesting\fwshabcondition\template_InvasiveSource.lyrx"
+templateLCM = r"S:\Projects\USFWS\SE_FWS_Habitat_2022\FWS_HabConScriptTesting\fwshabcondition\template_LCM.lyrx"
 
 #path = r"S:\Projects\_Workspaces\Jordana_Anderson\SE_USFWS\FWS_SE_Condition\FWS_SE_Condition_testing\FWS_SE_Condition_testing.gdb\combined_EVT_Clip"
 value_list = []   
@@ -93,7 +94,8 @@ for index in value_list:
     #arcpy.management.AlterField(hexgridselection, "MEAN", "scoreLCM", "LCM Score") 
 
     # apply a layer file
-    
+    dst = hexgridselection + ".lyrx"
+    shutil.copyfile(templateLCM, dst)
 
 
     # clean up
