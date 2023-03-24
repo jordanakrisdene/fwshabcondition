@@ -49,8 +49,6 @@ col_idx = 1
 # for altering a text column later
 column = [row[1] for row in value_list] # use a list comprehension to extract the column of interest
 max_length = max(len(element) for element in column) + 10 # find the maximum length of the elements in the column
-
-
         
 print("Creating condition datasets for " + str(len(value_list)) + " ecological systems.")
 print("===============================================================================")
@@ -93,7 +91,7 @@ for index in value_list:
     arcpy.management.JoinField(in_data=hexgridselection, in_field="GRID_ID", join_table=ZonalSt_Value_LCM, join_field="GRID_ID", fields=["MEAN"])[0]
     arcpy.management.CalculateField(in_table=hexgridselection, field="scoreLCM", expression="round(!MEAN!,1)", field_type="DOUBLE")
     arcpy.management.DeleteField(hexgridselection, "MEAN")
-    arcpy.management.AlterField(hexgridselection, "MEAN", "scoreLCM", "LCM Score") 
+    arcpy.management.AlterField(hexgridselection, "scoreLCM", "scoreLCM", "LCM Score") 
 
     # Work on Invasive Risk score
     print("- calculating the invasive risk score")
